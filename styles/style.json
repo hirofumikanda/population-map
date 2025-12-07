@@ -1,0 +1,61 @@
+{
+  "version": 8,
+  "name": "terrain style",
+  "sources": {
+    "osm-tiles": {
+      "type": "raster",
+      "tiles": ["https://tile.openstreetmap.org/{z}/{x}/{y}.png"],
+      "tileSize": 256,
+      "maxzoom": 19,
+      "attribution": "© OpenStreetMap contributors"
+    },
+    "PTN_2025": {
+      "type": "raster-dem",
+      "url": "pmtiles:///population-map/data/tiles_pop2025_rgb.pmtiles",
+      "encoding": "custom",
+      "redFactor": 65536,
+      "greenFactor": 256,
+      "blueFactor": 1,
+      "baseShift": 0,
+      "tileSize": 256,
+      "minzoom": 5,
+      "maxzoom": 10,
+      "attribution": "<a href='https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-mesh250r6.html' target='_blank'>250mメッシュ別将来推計人口データ（国土数値情報）</a>"
+    }
+  },
+  "layers": [
+    {
+      "id": "osm-tiles",
+      "type": "raster",
+      "source": "osm-tiles",
+      "minzoom": 0
+    },
+    {
+      "id": "PTN_2025",
+      "type": "color-relief",
+      "source": "PTN_2025",
+      "minzoom": 5,
+      "paint": {
+        "color-relief-color": [
+          "interpolate",
+          ["linear"],
+          ["elevation"],
+          0,
+          "rgba(0,0,255,0)",
+          250,
+          "rgba(0,255,255,0.5)",
+          500,
+          "rgba(0,255,128,0.5)",
+          750,
+          "rgba(0,255,0,0.5)",
+          1000,
+          "rgba(255,255,0,0.5)",
+          1250,
+          "rgba(255,128,0,0.5)",
+          1500,
+          "rgba(255,0,0,0.5)"
+        ]
+      }
+    }
+  ]
+}
