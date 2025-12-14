@@ -1,14 +1,12 @@
 import { useEffect, useRef } from "react";
 import maplibregl, { Map } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
-import { usePmtilesProtocol } from "../hooks/usePmtilesProtocol";
+import { getRasterPixelColor, calculatePopulationDensity } from "../utils/tileUtils";
 import Legend from "./Legend";
 
 const MapComponent = () => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const mapRef = useRef<Map | null>(null);
-
-  usePmtilesProtocol();
 
   useEffect(() => {
     if (mapRef.current || !mapContainer.current) return;
@@ -25,14 +23,10 @@ const MapComponent = () => {
       // ナビゲーションコントロールを右上に追加
       map.addControl(new maplibregl.NavigationControl(), "top-right");
 
-      // PTN_2025をterrain sourceとして設定
-      map.setTerrain({ source: "PTN_2025", exaggeration: 0.01 });
-
-      map.on("click", (e) => {
-        const elevation = map.queryTerrainElevation(e.lngLat);
-
-        if (elevation !== null && elevation !== undefined) {
-          const density = Math.round(elevation * 100000000 / 250 / 250);
+      map.on("click", async (e) => {
+        try {
+          const color = await getRasterPixelColor(e.lngLat, map);
+          const density = calculatePopulationDensity(color.r, color.g, color.b);
           const formattedDensity = density.toLocaleString('ja-JP');
           
           new maplibregl.Popup()
@@ -42,6 +36,8 @@ const MapComponent = () => {
               ${formattedDensity} 人/km²
             </div>`)
             .addTo(map);
+        } catch (error) {
+          console.error("Failed to get population density:", error);
         }
       });
     });

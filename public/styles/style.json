@@ -11,7 +11,7 @@
     },
     "PTN_2025": {
       "type": "raster-dem",
-      "url": "pmtiles:///population-map/data/tiles_pop2025_rgb.pmtiles",
+      "tiles": ["./tiles/PTN_2025/{z}/{x}/{y}.png"],
       "encoding": "custom",
       "redFactor": 65536,
       "greenFactor": 256,
