@@ -35,6 +35,8 @@ npm run dev
   - URL: https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-mesh250r6.html
   - 対象年: 2025年推計値
   - メッシュサイズ: 250m × 250m
+  - 同一解像度でラスタライズ→Webメルカトル投影→RGBエンコーディング（value = R * 256 * 256 + G * 256 + B）→XYZタイルの順で変換してタイル化
+
 
 ## プロジェクト構造
 
